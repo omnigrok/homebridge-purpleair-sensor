@@ -20,7 +20,7 @@ function parseRemotePurpleAirJson(data, averages?: string, conversion?: string) 
   })();
   const pm25Cf1 = parseFloat(sensor_data['pm2.5_cf_1']);
   const humidity = parseFloat(sensor_data.humidity);
-  const temperature = parseFloat(sensor_data.temperature);
+  const temperature = fahrenheitToCelsius(parseFloat(sensor_data.temperature));
   const sensor = sensor_data.sensor_index;
   const voc = sensor_data.voc ? parseFloat(sensor_data.voc) : null;
   return new SensorReading(sensor, pm25, pm25Cf1, humidity, temperature, voc, conv);
@@ -31,10 +31,14 @@ function parseLocalPurpleAirJson(data, averages?: string, conversion?: string) {
   const pm25 = parseFloat(data.pm2_5_atm);
   const pm25Cf1 = parseFloat(data.pm2_5_cf_1);
   const humidity = parseFloat(data.current_humidity);
-  const temperature = parseFloat(data.current_temp_f);
+  const temperature = fahrenheitToCelsius(parseFloat(data.current_temp_f));
   const sensor = data.Id;
   const voc = data.gas_680 ? parseFloat(data.gas_680) : null;
   return new SensorReading(sensor, pm25, pm25Cf1, humidity, temperature, voc, conv);
+}
+
+function fahrenheitToCelsius(temp_f: number): number {
+  return (temp_f - 32) / 1.8000;
 }
 
 export class SensorReading {
@@ -46,6 +50,7 @@ export class SensorReading {
    * @param pm25 sensor pm 2.5 value (PM2_5Value)
    * @param pm25Cf1 sensor pm 2.5 value from CF1 / standard particles (pm2_5_cf_1)
    * @param humidity sensor humidity value
+   * @param temperature sensor temperature value in celsius
    * @param voc sensor Voc value
    * @param conversion conversion ("None", "AQandU", "LRAPA", "EPA", or "WOODSMOKE"). Default to None.
    */
@@ -61,7 +66,7 @@ export class SensorReading {
   }
 
   public toString = () : string => {
-    return `SensorReading(AQI=${this.aqi.toFixed(0)}, PM25=${this.pm25}u/m3, PM25_CF1=${this.pm25Cf1}u/m3, Humidity=${this.humidity}, Temperature=${this.temperature}, VOC=${this.voc})`;
+    return `SensorReading(AQI=${this.aqi.toFixed(0)}, PM25=${this.pm25}u/m3, PM25_CF1=${this.pm25Cf1}u/m3, Humidity=${this.humidity}, Temperature=${this.temperature}ºC, VOC=${this.voc})`;
   };
 
   get aqi(): number {
@@ -169,4 +174,5 @@ export class SensorReading {
     const c = Cp - BPl;
     return Math.round((a / b) * c + Il);
   }
+
 }
