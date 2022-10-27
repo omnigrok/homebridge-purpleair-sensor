@@ -86,6 +86,26 @@ class PurpleAirSensor implements AccessoryPlugin {
         }
       });
 
+    this.humidityService.getCharacteristic(hap.Characteristic.StatusActive)
+      .on(CharacteristicEventTypes.GET, (callback: CharacteristicGetCallback) => {
+        if (this.lastReading !== undefined) {
+          this.update();
+          callback(null, this.lastReadingActive);
+        } else {
+          callback(null, false);
+        }
+      });
+
+    this.temperatureService.getCharacteristic(hap.Characteristic.StatusActive)
+      .on(CharacteristicEventTypes.GET, (callback: CharacteristicGetCallback) => {
+        if (this.lastReading !== undefined) {
+          this.update();
+          callback(null, this.lastReadingActive);
+        } else {
+          callback(null, false);
+        }
+      });
+
     this.informationService = new hap.Service.AccessoryInformation()
       .setCharacteristic(hap.Characteristic.Manufacturer, 'PurpleAir')
       .setCharacteristic(hap.Characteristic.Model, 'PurpleAir')
