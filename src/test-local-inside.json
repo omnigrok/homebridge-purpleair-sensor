@@ -24,6 +24,7 @@
   "current_humidity": 27,
   "current_dewpoint_f": 42,
   "pressure": 970.67,
+  "gas_680": 25.38,
   "p25aqic": "rgb(45,233,0)",
   "pm2.5_aqi": 28,
   "pm1_0_cf_1": 4.56,

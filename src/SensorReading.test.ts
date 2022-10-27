@@ -179,10 +179,12 @@ test('local inside sensor', () => {
   const reading = parsePurpleAirJson(testLocalInside, 'realtime', 'None', true);
   expect(reading.aqi).toBe(28);
   expect(reading.pm25).toBe(6.67);
+  expect(reading.voc).toBe(25.38);
 });
 
 test('local outside sensor', () => {
   const reading = parsePurpleAirJson(testLocalOutside, 'realtime', 'None', true);
   expect(reading.aqi).toBe(9);
   expect(reading.pm25).toBe(2.16);
+  expect(reading.voc).toBe(25.38);
 });
